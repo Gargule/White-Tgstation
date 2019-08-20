@@ -17,7 +17,10 @@
 		"target Y rel" = IC_PINTYPE_NUMBER,
 		"mode"         = IC_PINTYPE_BOOLEAN
 		)
-	outputs = list("reference to gun" = IC_PINTYPE_REF)
+	outputs = list(
+		"reference to gun" = IC_PINTYPE_REF,
+		"reference to cell" = IC_PINTYPE_REF
+		)
 	activators = list(
 		"fire" = IC_PINTYPE_PULSE_IN
 
@@ -58,12 +61,13 @@
 		lethal_projectile = gun_properties["lethal_projectile"]
 		lethal_projectile_sound = gun_properties["lethal_projectile_sound"]
 		if(gun_properties["shot_delay"])
-			cooldown_per_use = gun_properties["shot_delay"]*10
-		if(cooldown_per_use<30)
-			cooldown_per_use = 30
+			cooldown_per_use = gun_properties["shot_delay"]
+		else
+			cooldown_per_use = 1
 		if(gun_properties["reqpower"])
 			power_draw_per_use = gun_properties["reqpower"]
 		set_pin_data(IC_OUTPUT, 1, WEAKREF(installed_gun))
+		set_pin_data(IC_OUTPUT, 2, WEAKREF(installed_gun.cell))
 		push_data()
 	else
 		..()
@@ -819,7 +823,7 @@
 	var/target_y_rel = round(get_pin_data(IC_INPUT, 2))
 	var/obj/item/A = get_pin_data_as_type(IC_INPUT, 3, /obj/item)
 
-	if(!A || A.anchored || A.throwing))
+	if(!A || A.anchored || A.throwing)
 		return
 
 	if(max_w_class && (A.w_class > max_w_class))
