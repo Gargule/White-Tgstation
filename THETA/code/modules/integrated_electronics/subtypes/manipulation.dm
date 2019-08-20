@@ -826,7 +826,7 @@
 	if(!A || A.anchored || A.throwing)
 		return
 
-	if(max_w_class && (A.w_class > max_w_class))
+	if(max_w_class && (A.w_class > max_w_class) && !istype(A, /obj/item/twohanded/))
 		return
 
 	if(!assembly.can_fire_equipped && ishuman(assembly.loc))
@@ -852,10 +852,10 @@
 	var/x_abs = CLAMP(T.x + target_x_rel, 0, world.maxx)
 	var/y_abs = CLAMP(T.y + target_y_rel, 0, world.maxy)
 	var/range = round(CLAMP(sqrt(target_x_rel*target_x_rel+target_y_rel*target_y_rel),0,8),1)
-	//remove damage
+	/*remove damage //Gargule:formennoe peedorstvo
 	A.throwforce = 0
 	A.embedding = list("embed_chance" = 0)
-	//throw it
+	*///throw it
 	assembly.visible_message("<span class='danger'>[assembly] has thrown [A]!</span>")
 	log_attack("[assembly] [REF(assembly)] has thrown [A].")
 	A.forceMove(drop_location())
@@ -866,6 +866,8 @@
 		G.update_outputs()
 
 /obj/item/integrated_circuit/manipulation/thrower/proc/post_throw(obj/item/A) //wtf??? is this nerf, shitcode, or something?
-	//return damage
+	/*return damage
 	A.throwforce = initial(A.throwforce)
 	A.embedding = initial(A.embedding)
+	*/
+	return
