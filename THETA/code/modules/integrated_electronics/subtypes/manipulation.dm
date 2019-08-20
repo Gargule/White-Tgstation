@@ -787,18 +787,18 @@
 
 	set_pin_data(IC_OUTPUT, 1, M.held_items)
 	activate_pin(2)
-	
+
 /obj/item/integrated_circuit/manipulation/thrower
 	name = "thrower"
 	desc = "A compact launcher to throw things from inside or nearby tiles."
 	extended_desc = "The first and second inputs need to be numbers which correspond to the coordinates to throw objects at relative to the machine itself. \
 	The 'fire' activator will cause the mechanism to attempt to throw objects at the coordinates, if possible. Note that the \
-	projectile needs to be inside the machine, or on an adjacent tile, and must be medium sized or smaller. The assembly \
+	projectile needs to be inside the machine, or on an adjacent tile, and must not be bigger than assembly. The assembly \
 	must also be a gun if you wish to throw something while the assembly is in hand."
 	complexity = 25
 	w_class = WEIGHT_CLASS_SMALL
 	size = 2
-	cooldown_per_use = 10
+	cooldown_per_use = 1
 	ext_cooldown = 1
 	inputs = list(
 		"target X rel" = IC_PINTYPE_NUMBER,
@@ -819,10 +819,7 @@
 	var/target_y_rel = round(get_pin_data(IC_INPUT, 2))
 	var/obj/item/A = get_pin_data_as_type(IC_INPUT, 3, /obj/item)
 
-	if(!A || A.anchored || A.throwing || A == assembly || istype(A, /obj/item/twohanded) || istype(A, /obj/item/transfer_valve))
-		return
-
-	if (istype(assembly.loc, /obj/item/implant/storage)) //Prevents the more abusive form of chestgun.
+	if(!A || A.anchored || A.throwing))
 		return
 
 	if(max_w_class && (A.w_class > max_w_class))
@@ -864,7 +861,7 @@
 	if(istype(G))
 		G.update_outputs()
 
-/obj/item/integrated_circuit/manipulation/thrower/proc/post_throw(obj/item/A)
+/obj/item/integrated_circuit/manipulation/thrower/proc/post_throw(obj/item/A) //wtf??? is this nerf, shitcode, or something?
 	//return damage
 	A.throwforce = initial(A.throwforce)
 	A.embedding = initial(A.embedding)
